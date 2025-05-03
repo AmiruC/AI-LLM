@@ -1,0 +1,14 @@
+How to enable Low Power Mode
+Go to Settings → Battery → Toggle on Low Power Mode. This reduces background activity and extends battery life.
+
+How to backup your iPhone to iCloud
+Go to Settings → [Your Name] → iCloud → iCloud Backup → Tap “Back Up Now.” Make sure you're connected to Wi-Fi.
+
+How to change your default browser
+Go to Settings → Scroll to your browser (e.g., Chrome or Firefox) → Tap “Default Browser App” → Select your preferred option.
+
+How to set up Face ID
+Go to Settings → Face ID & Passcode → Tap “Set up Face ID” and follow on-screen instructions to register your face.
+
+How to share your Wi-Fi password
+If your device is unlocked and near the recipient, a prompt will appear to share your Wi-Fi password automatically. Both devices must be running iOS 11 or later.

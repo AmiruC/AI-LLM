@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Apple Help AI</title>
+  <style>
+    /* Clean, Apple-style page layout */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "San Francisco", Helvetica, Arial, sans-serif;
+      padding: 40px;
+      max-width: 700px;
+      margin: auto;
+      background-color: #f9f9f9;
+      color: #1d1d1f;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      color: #1d1d1f;
+    }
+
+    /* Input field for user question */
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* General button styles */
+    button {
+      width: 104%;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background-color: #0071e3;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005bb5;
+    }
+
+    /* Box that shows source snippets from documents */
+    .result {
+      background: #ffffff;
+      margin-top: 15px;
+      padding: 16px;
+      width: 100%;
+      border-left: 4px solid #0071e3;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    /* Main Ask button width override */
+    #askBtn {
+      width: 104%;
+    }
+
+    /* Floating help button in bottom corner */
+    #helpBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #0071e3;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      font-size: 18px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #helpBtn:hover {
+      background-color: #005bb5;
+    }
+
+    .source {
+      font-size: 13px;
+      color: #888;
+      margin-top: 8px;
+    }
+
+    /* Answer box with LLM-generated response */
+    .natural-answer {
+      background: #f0f4ff;
+      width: 99%;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border-left: 4px solid #0071e3;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+  </style>
+</head>
+<body>
+  
+  <h1>Apple Help AI</h1>
+
+  <!-- Where users type their questions -->
+  <input type="text" id="question" placeholder="Ask about Apple ID, iPhone products, or device settings..." oninput="toggleButton()" />
+
+  <!-- Ask button (starts disabled) -->
+  <button id="askBtn" onclick="ask()" disabled>Ask</button>
+
+  <!-- Where results will show up -->
+  <div id="results" style="margin-top:10px;"></div>
+
+  <!-- Loading spinner text -->
+  <div id="loading" style="display: none; margin-top: 15px; font-style: italic; color: #555;">Loading...</div>
+
+  <!-- Help button (bottom right corner) -->
+  <button onclick="toggleHelp()" title="About this app" id="helpBtn">Help</button>
+
+  <!-- Hidden box that shows help info -->
+  <div id="helpBox" style="display:none; width:100%; margin-top:10px; padding:10px; border-left:4px solid #007aff; background:#f0f8ff;">
+    <strong>About This App:</strong><br><br>
+    This AI assistant helps you find answers related to Apple devices like iPhones and Apple ID.<br><br>
+    It gives you both a human-like answer and the actual sources it found info in.<br><br>
+
+    <strong>You can ask things like:</strong><br>
+    - "How do I reset my Apple ID password?"<br>
+    - "What are the current iPhone models?"<br>
+    - "How do I turn on low power mode?"<br>
+    - "What color is the iPhone SE and does it have a home button?"<br>
+  </div>
+
+  <script>
+    // Show or hide the help box
+    function toggleHelp() {
+      const box = document.getElementById("helpBox");
+      box.style.display = box.style.display === "none" ? "block" : "none";
+    }
+
+    // Disable the Ask button if the input is empty
+    function toggleButton() {
+      const input = document.getElementById("question").value.trim();
+      const btn = document.getElementById("askBtn");
+      btn.disabled = input === "";
+    }
+
+    // Called when the Ask button is clicked
+    async function ask() {
+      const q = document.getElementById("question").value;
+      const resBox = document.getElementById("results");
+      const loading = document.getElementById("loading");
+      const btn = document.getElementById("askBtn");
+
+      // Show "Loading..." and disable the button
+      btn.disabled = true;
+      loading.style.display = "block";
+      resBox.innerHTML = "";
+
+      try {
+        // Call the backend with your question
+        const res = await fetch(`/query?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+
+        // Hide loading and re-enable the button
+        loading.style.display = "none";
+        btn.disabled = false;
+
+        // Display AI-generated answer if we have one
+        if (data.natural_answer) {
+          const answerDiv = document.createElement("div");
+          answerDiv.className = "natural-answer";
+          answerDiv.innerHTML = `
+            <h3>Answer</h3>
+            <p>${data.natural_answer}</p>
+            <h4 style="margin-top: 10px;">See Source Below:</h4>
+          `;
+          resBox.appendChild(answerDiv);
+        }
+
+        // Show matching document chunks
+        if (data.results && data.results.length > 0) {
+          data.results.forEach(result => {
+            const div = document.createElement("div");
+            div.className = "result";
+            div.innerHTML = `
+              <div>${result.text}</div>
+              <div class="source">Source: ${result.source} | Score: ${result.score.toFixed(2)}</div>
+            `;
+            resBox.appendChild(div);
+          });
+        } else {
+          // No results found
+          resBox.innerHTML = "<p>No relevant answers found.</p>";
+        }
+
+      } catch (error) {
+        // Something went wrong – show message
+        loading.style.display = "none";
+        btn.disabled = false;
+        resBox.innerHTML = "<p>Something went wrong. Please try again.</p>";
+        console.error("Error during query:", error);
+      }
+    }
+  </script>
+
+</body>
+</html>

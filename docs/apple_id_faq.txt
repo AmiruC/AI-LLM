@@ -1,0 +1,17 @@
+How do I create a new Apple ID password?
+To create a new apple id go to apple.com and press create new Apple ID.
+
+How do I reset my Apple ID password?
+Go to iforgot.apple.com and follow the steps to reset your password. You can verify using your trusted device or recovery email.
+
+What should I do if my Apple ID is locked?
+If your Apple ID is locked for security reasons, visit iforgot.apple.com to unlock your account with your current credentials or recovery key.
+
+Can I use the same Apple ID on multiple devices?
+Yes. You can sign in with the same Apple ID on multiple Apple devices to sync content, photos, messages, and subscriptions across them.
+
+How do I update my Apple ID email address?
+Go to appleid.apple.com, sign in, then click Edit next to the account section. You can update your email address after verifying access.
+
+How do I remove a device from my Apple ID?
+Go to Settings on your iPhone or iCloud.com. Under your account settings, select the device and choose “Remove from Account.”
