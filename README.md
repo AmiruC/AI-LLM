@@ -23,7 +23,7 @@ A lightweight frontend interface is also included to interactively explore the d
 ## Setup Instructions
 
 1. Clone the Repository <br/>
-  git clone https://github.com/yourusername/AI-LLM.git<br/>
+  git clone https://github.com/AmiruC/AI-LLM.git<br/>
   cd AI-LLM
 
 3. Create Virtual Environment<br/>
