@@ -1,101 +1,78 @@
 # PEERCORE-AILLM: Document-Based Q&A API
 
-PEERCORE-AILLM is a FastAPI-powered web service that enables intelligent querying over `.txt` and `.md` documents using Amazon Bedrock's Titan embeddings. It embeds documents into vector representations at startup, stores them **in memory**, and supports natural language queries with context-aware results and matched source chunks.
+PEERCORE-AILLM is a FastAPI-powered service that enables intelligent, context-aware querying of .txt and .md documents using Amazon Bedrock’s Titan Embeddings.
+At startup, the system loads documents, splits them into chunks, embeds each into high-dimensional vectors, and stores them in memory for fast retrieval. Users can then ask natural language questions and receive semantically relevant answers, including:
+A natural language response generated from the best-matched content
+The original source chunk(s) used
+A relevance score indicating match confidence
+A lightweight frontend interface is also included to interactively explore the document knowledge base.
 
----
+🚀 Features:
 
-## 🧠 Features
-
-- 📄 Load and parse documents (`.txt`, `.md`) from a folder  
-- 🔍 Convert text into vector embeddings using **Amazon Bedrock (Titan Embeddings)**  
-- ⚡ Perform in-memory similarity search (no database or FAISS needed)  
-- 🤖 Answer questions with AI-generated responses + relevant source chunks  
-- 🚀 FastAPI backend with Gunicorn deployment support  
-- 📦 Lightweight and easy to deploy  
-
----
-
-## 📁 Project Structure
+📄 Load and parse .txt and .md documents from a local folder
+🔍 Generate vector embeddings using Amazon Bedrock (Titan)
+🧠 In-memory similarity search (no database or FAISS required)
+🤖 Natural language AI-generated answers with supporting source chunks
+🧪 FastAPI backend with Gunicorn deployment support
+⚙️ Lightweight, portable, and easy to deploy
+📁 Project Structure
 
 AI-LLM/
-│
 ├── app/
-│ └── main.py # FastAPI entrypoint and startup logic
+│   └── main.py           # FastAPI entry point
 │
 ├── src/
-│ ├── api.py # POST /query API route
-│ ├── loader.py # Loads and chunks documents
-│ ├── embedder.py # Bedrock embedding logic
-│ ├── search.py # In-memory vector store & similarity match
+│   ├── api.py            # API endpoint for question answering
+│   ├── loader.py         # Loads and chunks documents
+│   ├── embedder.py       # Embeds text using Titan
+│   ├── search.py         # In-memory search & similarity scoring
 │
-├── static/ # Optional static frontend files
-│ └── index.html
+├── static/               # Optional frontend
+│   └── index.html
 │
-├── requirements.txt # Python dependencies
-├── start.sh # Optional startup script
-├── README.md # Project documentation
+├── requirements.txt      # Python dependencies
+├── start.sh              # Optional startup script
+├── README.md             # Project documentation
 
----
 
-## ⚙️ Setup Instructions
+⚙️ Setup Instructions
 
-### 1. Clone the Repository
-
-```bash
+1. Clone the Repository
 git clone https://github.com/yourusername/AI-LLM.git
 cd AI-LLM
-2. Create Virtual Environment
+
+3. Create Virtual Environment
 python3 -m venv venv
 source venv/bin/activate
-3. Install Dependencies
+
+5. Install Dependencies
 pip install -r requirements.txt
-Make sure the following packages are included:
+Make sure the following packages are listed in requirements.txt:
 fastapi
 uvicorn
 gunicorn
 boto3
 sentence-transformers
 python-dotenv
-4. AWS Configuration (Bedrock Access)
-Ensure AWS credentials are available via ~/.aws/credentials or environment variables. You must have access to Bedrock and permissions to call InvokeModel.
-🚀 Run the API
 
-Development (hot reload):
+7. Run in Development Mode
 uvicorn app.main:app --reload
-Production (Gunicorn):
-gunicorn app.main:app --workers 1 --bind 0.0.0.0:8000
-📬 API Usage
 
-POST /query
-Ask a natural language question.
-Request:
-{
-  "question": "What is the purpose of this system?"
-}
-Response:
-{
-  "answer": "This system allows querying documents using Bedrock embeddings...",
-  "matches": [
-    {
-      "chunk_id": "doc-01-chunk-03",
-      "text": "This API enables intelligent Q&A over uploaded documents."
-    }
-  ]
-}
 🧠 Design Decisions
 
-In-memory vector storage was used to simplify deployment and optimize speed for smaller-scale use cases.
-Amazon Bedrock Titan Embeddings were chosen for secure, scalable, high-quality embeddings without self-hosting models.
-Avoided external databases or vector DBs to reduce infrastructure complexity.
-🌐 Sample Questions
+Why Amazon Titan Embeddings?
+This project uses Titan Embeddings via Amazon Bedrock to convert documents into dense vector representations. Titan was chosen for:
+- High semantic relevance — Optimised for natural language understanding and similarity search
+- Seamless AWS integration — Works with Boto3 and IAM
+- Lightweight deployment — No need for local models or external databases
 
-"What does the preload function do?"
-"Which documents are loaded on startup?"
-"How is the vector search implemented?"
-🏗️ Architecture Overview
+Why In-memory vectoring over FIASS?
+- Simplicity and Portability - In-memory storage eliminates the need for complex setup, indexing, or persistence layers. It allows the entire application to remain lightweight and easily deployable with no external dependencies
+- Tight Integration with Python - The in-memory solution works natively with Python data structures (e.g., NumPy arrays), reducing friction in development and debugging
+- Perfect for lightweight proof of concept
 
-[Markdown/.txt Files] --> [Chunking] --> [Titan Embeddings via Bedrock]
-           |
-        [In-Memory Vector Store] <--> [Similarity Search]
-           |
-        [FastAPI] <--> [User Query Input]
+
+
+
+
+
