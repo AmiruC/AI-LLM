@@ -43,6 +43,19 @@ python-dotenv<br/>
 7. Run in Development Mode<br/>
 uvicorn app.main:app --reload<br/>
 
+## Environment Setup (.env)
+
+This project requires AWS credentials and configuration values to be set in a `.env` file **which is not included in this repository** for security reasons.
+
+Create a `.env` file in the root directory of the project with the following format:
+
+
+AWS_ACCESS_KEY_ID=your-access-key-id
+AWS_SECRET_ACCESS_KEY=your-secret-access-key
+AWS_REGION=us-east-1
+USE_AWS=true
+
+
 ## Design Decisions
 
 Why Amazon Titan Embeddings?
