@@ -1,19 +1,20 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
-# import api logic 
+# Import API logic
 from src.api import router as api_router
 from src.loader import load_documents_from_folder
 from src.embedder import embed_text
 from src.search import add_to_vector_store
 
-
 app = FastAPI(title="PEERCORE-AILLM Knowledge Query API")
 
-# Define the index file to display 
+# Mount the static folder
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-#Call api logic
+# Register the API router
 app.include_router(api_router)
 
 # Load and embed documents at startup
@@ -23,16 +24,15 @@ def preload_docs():
     documents = load_documents_from_folder()
 
     for doc in documents:
-        # TRY..EXCEPTION to catch error with file embedding 
         try:
             embedding = embed_text(doc["text"])
-            # send the documents for embedding
             add_to_vector_store(embedding, doc)
         except Exception as e:
             print(f"Failed to embed chunk: {doc['chunk_id']}\n{e}")
     
     print(f"Loaded {len(documents)} chunks into memory")
 
+# Serve index.html at root
 @app.get("/")
 def root():
-    return {"message": "PEERCORE-AILLM"}
+    return FileResponse(os.path.join("static", "index.html"))

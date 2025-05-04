@@ -5,26 +5,33 @@ from src.generate_answer import generate_answer
 
 # API for query
 router = APIRouter()
-
 @router.get("/query")
 def query(q: str = Query(...)):
     try:
-        # Embed the users question
+        # Step 1: Embed the user question
         query_embedding = embed_text(q)
-        # Find the most similar document chunks top 3
-        results = search_similar_chunks(query_embedding, top_k=3, threshold=0.5)  # <— pass threshold
 
-        # If results are empty due to not meeting criteria 
+        # Step 2: Retrieve top 3 similar chunks with threshold
+        results = search_similar_chunks(query_embedding, top_k=3, threshold=0.5)
+
         if not results:
             return {
                 "query": q,
                 "natural_answer": "I'm sorry, I don't have information on that topic at the moment.",
                 "results": []
             }
-        # This only takes the top most relevant source to stop confusion on the Titan model
-        top_context = results[0]["text"]
 
-        # Send the question to Titan Text G1 model on bedrock
+        # Step 3: Confidence check based on similarity score
+        top_result = results[0]
+        if top_result["score"] < 0.5:
+            return {
+                "query": q,
+                "natural_answer": "I'm not confident enough to answer that question based on the available documents.",
+                "results": results
+            }
+
+        # Step 4: Use top chunk as context for LLM answer
+        top_context = top_result["text"]
         natural_answer = generate_answer(q, top_context)
 
         return {
@@ -35,3 +42,4 @@ def query(q: str = Query(...)):
 
     except Exception as e:
         return {"error": str(e)}
+
