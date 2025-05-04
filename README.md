@@ -1,5 +1,7 @@
 # PEERCORE-AILLM: Document-Based Q&A API
 
+Public Available link hosted on the cloud: http://54.160.213.114:8000
+
 PEERCORE-AILLM is a FastAPI-powered service that enables intelligent, context-aware querying of .txt and .md documents using Amazon Bedrock’s Titan Embeddings.<br/>
 
 At startup, the system loads documents, splits them into chunks, embeds each into high-dimensional vectors, and stores them in memory for fast retrieval. Users can then ask natural language questions and receive semantically relevant answers, including:<br/>
