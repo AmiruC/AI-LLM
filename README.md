@@ -15,27 +15,8 @@ A lightweight frontend interface is also included to interactively explore the d
 🤖 Natural language AI-generated answers with supporting source chunks
 🧪 FastAPI backend with Gunicorn deployment support
 ⚙️ Lightweight, portable, and easy to deploy
-📁 Project Structure
 
-AI-LLM/
-├── app/
-│   └── main.py           # FastAPI entry point
-│
-├── src/
-│   ├── api.py            # API endpoint for question answering
-│   ├── loader.py         # Loads and chunks documents
-│   ├── embedder.py       # Embeds text using Titan
-│   ├── search.py         # In-memory search & similarity scoring
-│
-├── static/               # Optional frontend
-│   └── index.html
-│
-├── requirements.txt      # Python dependencies
-├── start.sh              # Optional startup script
-├── README.md             # Project documentation
-
-
-⚙️ Setup Instructions
+**Setup Instructions
 
 1. Clone the Repository
 git clone https://github.com/yourusername/AI-LLM.git
@@ -58,7 +39,7 @@ python-dotenv
 7. Run in Development Mode
 uvicorn app.main:app --reload
 
-🧠 Design Decisions
+**Design Decisions
 
 Why Amazon Titan Embeddings?
 This project uses Titan Embeddings via Amazon Bedrock to convert documents into dense vector representations. Titan was chosen for:
