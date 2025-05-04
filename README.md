@@ -51,6 +51,9 @@ This project uses Titan Embeddings via Amazon Bedrock to convert documents into 
 - Seamless AWS integration — Works with Boto3 and IAM
 - Lightweight deployment — No need for local models or external databases
 
+Why two models? Titan Embeddings & Titan Text G1?
+- The app uses two different models because each serves a unique purpose. Amazon Titan Embeddings converts text into vector representations to semantically match user questions with relevant document chunks. Once the best chunk is found, Titan Text G1 generates a natural language answer based on that content, providing a clear and conversational response.
+
 Why In-memory vectoring over FIASS?
 - Simplicity and Portability - In-memory storage eliminates the need for complex setup, indexing, or persistence layers. It allows the entire application to remain lightweight and easily deployable with no external dependencies
 - Tight Integration with Python - The in-memory solution works natively with Python data structures (e.g., NumPy arrays), reducing friction in development and debugging
