@@ -77,8 +77,8 @@ Why In-memory vectoring over FIASS?
 ## Sample Queries
 You can ask simple questions like:
 - "How do I reset my Apple ID password?"
-- "What are the current iPhone models?"
 - "How do I turn on low power mode?"
+- "How do I set up face ID?"
 
 You can ask complex questions like:
 - "What colour is the iPhone SE, and does it have a home button?"
